@@ -1,0 +1,72 @@
+{% load i18n static %}
+<!DOCTYPE html>{% get_current_language as LANGUAGE_CODE %}
+<html lang="{{ LANGUAGE_CODE|default:"en-us" }}">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link rel="stylesheet" href="{% static 'cms/css/bootstrap.min.css' %}">
+{% block extra_css %}{% endblock %}
+<title>{% block title %}My books{% endblock %}</title>
+</head>
+<body>
+
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand" href="#">コスト管理システム</a>
+  <button type="button" class="navbar-toggler" data-toggle="collapse" data-target="#Navber" aria-controls="Navber" aria-expanded="false" aria-label="ナビゲーションの切替">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+{% if user.is_authenticated %}
+
+    <div class="collapse navbar-collapse" id="Navber">
+    <ul class="navbar-nav mr-auto">
+
+      <li class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" id="master" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          マスタ
+        </a>
+        <div class="dropdown-menu" aria-labelledby="master">
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="{% url 'cms:person_list' %}">要員マスタ</a>
+          <a class="dropdown-item" href="#">コストマスタ</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">その他</a>
+        </div>
+      </li>
+
+      <li class="nav-item dropdown">
+        <a href="#" class="nav-link dropdown-toggle" id="admin" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+          管理
+        </a>
+        <div class="dropdown-menu" aria-labelledby="admin">
+          <a class="dropdown-item" href="#">メニュー1</a>
+          <a class="dropdown-item" href="#">メニュー2</a>
+          <div class="dropdown-divider"></div>
+          <a class="dropdown-item" href="#">その他</a>
+        </div>
+      </li>
+
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'cms:user_detail' user.pk %}">ユーザー情報閲覧</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'cms:logout' %}">ログアウト</a>
+      </li>
+      <li class="nav-item">
+        <a class="nav-link" href="{% url 'cms:password_change' %}">パスワードの変更</a>
+      </li>
+
+    </ul>
+  </div><!-- /.navbar-collapse -->
+</nav>
+{% endif %}
+
+  <div class="container">
+    {% block content %}
+      {{ content }}
+    {% endblock %}
+  </div>
+<script src="{% static 'cms/js/jquery-3.3.1.min.js' %}"></script>
+<script src="{% static 'cms/js/bootstrap.bundle.min.js' %}"></script>
+{% block extra_js %}{% endblock %}
+</body>
+</html>
