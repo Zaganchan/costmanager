@@ -102,28 +102,10 @@ if settings.AUTH_USER_MODEL == 'cms.User':
         # 名前
         name = models.CharField(max_length=255)
         # メールアドレス
-        email = models.CharField(max_length=255,unique=True)
-
-    class Cost(models.Model):
-        """コストモデル"""
-
-        # 人
-        person = models.ForeignKey('Person', on_delete=models.CASCADE)
-        # 所属会社
-        company = models.IntegerField()
-        # 社員等級
-        grade = models.IntegerField()
-        # 同一部署フラグ（true=製造第一 false=それ以外）
-        is_mf1 = models.BooleanField()
-        # 外注費
-        cost = models.IntegerField()
-        # 適用開始年月
-        start_ym = models.DateTimeField()
-        # 適用終了年月
-        end_ym = models.DateTimeField(null=True, blank=True)
+        email = models.CharField(max_length=255, unique=True)
 
     class Grade(models.Model):
-        """コストモデル"""
+        """グレードモデル"""
 
         # KSC社員級（同一部署）
         IN_G1 = 1
@@ -150,3 +132,25 @@ if settings.AUTH_USER_MODEL == 'cms.User':
         start_ym = models.DateTimeField()
         # 適用終了年月
         end_ym = models.DateTimeField(null=True, blank=True)
+
+
+    class Cost(models.Model):
+        """コストモデル"""
+
+        # 人
+        person = models.ForeignKey(Person, related_name='costs',  on_delete=models.CASCADE)
+        # 所属会社
+        company = models.IntegerField()
+        # 社員等級
+        grade = models.ForeignKey(Grade, related_name='grades', on_delete=models.CASCADE)
+        # 部署区分
+        busho_kbn = models.IntegerField(default=1, choices=[(1, '製造第一'), (2, '他部署')])
+        # 外注費
+        cost = models.IntegerField()
+        # 適用開始年月
+        start_ym = models.DateTimeField()
+        # 適用終了年月
+        end_ym = models.DateTimeField(null=True, blank=True)
+        # 実績フラグ
+        yojitsu_kbn = models.IntegerField(default=1, choices=[(1, '予定'), (2, '実績')])
+

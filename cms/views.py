@@ -14,9 +14,9 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 from django.views import generic
 from .forms import (
     LoginForm, UserCreateForm, UserUpdateForm, MyPasswordChangeForm,
-    MyPasswordResetForm, MySetPasswordForm, PersonForm
+    MyPasswordResetForm, MySetPasswordForm, PersonForm, CostForm
 )
-from cms.models import Person
+from cms.models import Person, Cost
 
 User = get_user_model()
 
@@ -198,3 +198,46 @@ class PersonList(LoginRequiredMixin, generic.TemplateView):
         return redirect('cms:person_list')
 
 
+class CostList(LoginRequiredMixin, generic.TemplateView):
+    """コストの一覧"""
+    context_object_name='costs'
+    template_name='cms/cost_list.html'
+    paginate_by = 2  # １ページは最大2件ずつでページングする
+
+    def cost_list(request, person_id):
+        """コストの一覧"""
+        person = Person.objects.get(pk=person_id)
+        Cost.person = person
+
+        costs = Cost.objects.all().order_by('id')
+        return render(request,
+                      'cms/cost_list.html',     # 使用するテンプレート
+                      {'costs': costs, 'person': person})         # テンプレートに渡すデータ
+
+    def cost_edit(request, person_id, cost_id=None):
+        """感想の編集"""
+        person = get_object_or_404(Person, pk=person_id)  # 親の書籍を読む
+        if cost_id:  # cost_id が指定されている (修正時)
+            cost = get_object_or_404(Cost, pk=cost_id)
+        else:  # cost_id が指定されていない (追加時)
+            cost = Cost()
+
+        if request.method == 'POST':
+            form = CostForm(request.POST, instance=cost)  # POST された request データからフォームを作成
+            if form.is_valid():  # フォームのバリデーション
+                cost = form.save(commit=False)
+                cost.person = person  # この感想の、親の書籍をセット
+                cost.save()
+                return redirect('cms:cost_list', person_id=person_id)
+        else:  # GET の時
+            form = CostForm(instance=cost)  # cost インスタンスからフォームを作成
+
+        return render(request,
+                      'cms/cost_edit.html',
+                      dict(form=form, person_id=person_id, cost_id=cost_id))
+
+    def cost_del(request, person_id, cost_id):
+        """感想の削除"""
+        cost = get_object_or_404(Cost, pk=cost_id)
+        cost.delete()
+        return redirect('cms:cost_list', person_id=person_id)

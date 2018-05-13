@@ -1,14 +1,14 @@
 {% extends "cms/base.html" %}
 {% load bootstrap4 %}
 
-{% block title %}書籍の編集{% endblock title %}
+{% block title %}コストの編集{% endblock title %}
 
 {% block content %}
-    <h4 class="mt-4 mb-5 border-bottom">書籍の編集</h4>
-    {% if book_id %}
-    <form action="{% url 'cms:book_mod' book_id=book_id %}" method="post">
+    <h4 class="mt-4 mb-5 border-bottom">コストの編集</h4>
+    {% if cost_id %}
+    <form action="{% url 'cms:cost_mod' person_id cost_id=cost_id %}" method="post">
     {% else %}
-    <form action="{% url 'cms:book_add' %}" method="post">
+    <form action="{% url 'cms:cost_add' person_id %}" method="post">
     {% endif %}
       {% csrf_token %}
       {% bootstrap_form form layout='horizontal' %}
@@ -18,5 +18,5 @@
         </div>
       </div>
     </form>
-    <a href="{% url 'cms:book_list' %}" class="btn btn-secondary btn-sm">戻る</a>
+    <a href="{% url 'cms:cost_list' person_id %}" class="btn btn-secondary btn-sm">戻る</a>
 {% endblock content %}

@@ -24,4 +24,8 @@ urlpatterns = [
     path('person_list/mod/<int:person_id>/', views.PersonList.person_edit, name='person_mod'),
     path('person_list/del/<int:person_id>/', views.PersonList.person_del, name='person_del'),
 
+    path('cost_list/<int:person_id>/', views.CostList.cost_list, name='cost_list'),
+    path('cost_list/add/<int:person_id>/', views.CostList.cost_edit, name='cost_add'),
+    path('cost_list/mod/<int:person_id>/<int:cost_id>/', views.CostList.cost_edit, name='cost_mod'),
+    path('cost_list/del/<int:person_id>/<int:cost_id>/', views.CostList.cost_del, name='cost_del'),
 ]

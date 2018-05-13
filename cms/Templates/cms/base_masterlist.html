@@ -1,0 +1,33 @@
+{% extends "cms/base_list.html" %}
+{% block list_content %}
+    {{ block.super }}
+    {# 削除を確認するモーダル ダイアログ #}
+    <div class="modal fade" id="deleteModal" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="deleteModalLabel">確認</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          </div>
+          <div class="modal-body">
+            <p>ID: <span id="del_pk"></span> を削除しますか？</p>
+          </div>
+          <div class="modal-footer">
+            <a href="#" class="btn btn-primary" id="del_url">OK</a>
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          </div>
+        </div>
+      </div>
+    </div>
+{% endblock list_content %}
+
+{% block extra_js %}
+<script>
+$(function() {
+  $('.del_confirm').on('click', function () {
+     $("#del_pk").text($(this).data("pk"));
+     $('#del_url').attr('href', $(this).data("url"));
+  });
+});
+</script>
+{% endblock %}

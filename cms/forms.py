@@ -1,10 +1,10 @@
 from django import forms
 from django.contrib.auth.forms import (
     AuthenticationForm, UserCreationForm, PasswordChangeForm,
-    PasswordResetForm, SetPasswordForm
+    PasswordResetForm, SetPasswordForm,
 )
 from django.contrib.auth import get_user_model
-from cms.models import Person
+from cms.models import Person, Cost
 
 User = get_user_model()
 
@@ -84,6 +84,12 @@ class PersonForm(forms.ModelForm):
         model = Person
         fields = ('name', 'email')
 
+
+class CostForm(forms.ModelForm):
+    """コストのフォーム"""
+    class Meta:
+        model = Cost
+        fields = ('company', 'grade', 'busho_kbn', 'cost', 'start_ym', 'end_ym', 'yojitsu_kbn')
 
 
 
